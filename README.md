@@ -27,7 +27,7 @@ To run the sample:
     "fileName": "readme.txt"
 }
 ```
-4. The copied file should be in the designated Azure Storage Account 
+4. The copied file should be in the designated Azure Storage Account with the same path and file name as the original.
 
 # Deploying to Azure
 Ensure when deploying to Azure that you add the following App Settings in the function app:
