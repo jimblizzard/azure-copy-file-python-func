@@ -13,8 +13,8 @@
     {
       "name": "outputblob",
       "type": "blob",
-      "path": "%OutputContainerName%/{fileName}",
-      "connection": "StorageAccountConnectionString",
+      "path": "%ContainerName%/{outputFileName}",
+      "connection": "StorageConnectionString",
       "direction": "out"
     },
     {

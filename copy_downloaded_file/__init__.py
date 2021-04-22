@@ -7,13 +7,22 @@ import azure.functions as func
 
 def main(req: func.HttpRequest, outputblob: func.Out[func.InputStream]) -> func.HttpResponse:
     json_body = req.get_json()
-    if 'fileName' not in json_body:
+    if 'outputFileName' not in json_body:
+        error = 'Request JSON body did not include outputFileName.'
+        logging.error(error)
         return func.HttpResponse(
-            "Request JSON body did not include fileName.",
+            error,
+            status_code=400
+        )
+    if 'sourceFileUrl' not in json_body:
+        error = 'Request JSON body did not include sourceFileUrl.'
+        logging.error(error)
+        return func.HttpResponse(
+            error,
             status_code=400
         )
 
-    response = requests.get(get_url(json_body['fileName']))
+    response = requests.get(json_body['sourceFileUrl'])
 
     if response.status_code >= 300:
         logging.error("Source file error", response.raise_for_status())
@@ -28,12 +37,3 @@ def main(req: func.HttpRequest, outputblob: func.Out[func.InputStream]) -> func.
         "Successfully copied the file.",
         status_code=200
     )
-
-def get_url(fileName):
-    url = os.environ['SourceStorageUrl']
-    
-    if not url.endswith('/'):
-        url += '/'
-
-    url += fileName
-    return url
