@@ -8,10 +8,11 @@ To run this sample locally you need
 
 # Functions
 1. copy_downloaded_file
- * Makes an http request to retrieve a file from one storage account and 
+    + Makes an http request to retrieve a file from a URL using a standard web request and then streams the blob to an output binding pointing to an Azure Storage Container.
+2. copy_streamed_file
+    + Invokes the Azure Storage API to retrieve a file from a specified URL and stream it directly into an Azure Storage Container. This is a blocking operation in the function invocation instance until the transfer is complete.
 
-# Download a file and upload to blob storage
-copy_downloaded_file
+# Running Locally
 
 To run the sample:
 1. Create a _local.settings.json_ file with the following settings (ensure the source container has anonymous read access)
@@ -27,17 +28,17 @@ To run the sample:
 }
 ```
 2. Run _func start_ in the directory
-3. POST a request to the local URL (with Postman or the like) with a JSON _fileName_ parameter designating the output file name you want to use and the _fileUrl_ of the source file.
+3. POST a request to the local URL of the specific function you want to invoke (with Postman or the like) with the following payload:
+ * outputFileName: The desired file name of the uploaded blob in Azure Storage.
+ * sourceFileUrl: The url of the source blob.
 ```json
 {
     "outputFileName": "output_readme.txt",
     "sourceFileUrl": "http://some-source/readme.txt"
 }
 ```
-4. The copied file should be in the designated Azure Storage Account in the container designated by the ContainerName environment/settings variable.
 
 # Deploying to Azure
 Ensure when deploying to Azure that you add the following App Settings in the function app:
-* StorageAccountConnectionString
-* OutputContainerName
-* SourceStorageUrl
+* StorageConnectionString
+* ContainerName
